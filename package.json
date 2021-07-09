@@ -1,0 +1,49 @@
+{
+  "name": "typeorm-query-builder-extended",
+  "version": "1.0.0",
+  "description": "Easily transform a query string into a TypeORM SelectQueryBuilder with foreign relation/table",
+  "main": "index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "build:watch": "tsc -p . --watch",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json",
+    "lint:format": "yarn lint && yarn format"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rutaks/typeorm-query-builder-extended.git"
+  },
+  "keywords": [
+    "typeorm",
+    "express",
+    "query string",
+    "query",
+    "builder",
+    "foreign table",
+    "nestjs",
+    "nest"
+  ],
+  "author": "rutaks",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rutaks/typeorm-query-builder-extended/issues"
+  },
+  "homepage": "https://github.com/rutaks/typeorm-query-builder-extended#readme",
+  "devDependencies": {
+    "@types/node": "^16.3.0",
+    "prettier": "^2.3.2",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typeorm": "^0.2.32",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "typeorm": "^0.2.32"
+  }
+}
