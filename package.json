@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Easily transform a query string into a TypeORM SelectQueryBuilder with foreign relation/table",
   "main": "index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
@@ -12,7 +13,12 @@
     "build:watch": "tsc -p . --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
-    "lint:format": "yarn lint && yarn format"
+    "lint:format": "npm run lint && npm run format",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
