@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="assets/logo.png" width="200" height="200">
+    <img src="https://raw.githubusercontent.com/rutaks/typeorm-query-builder-extended/main/assets/img/logo.png" width="200" height="200">
 </div>
 <h1 align="center"> TypeORM Query Builder Extended</h1>
 
