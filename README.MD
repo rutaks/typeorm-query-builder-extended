@@ -1,1 +1,137 @@
-# TypeORM Query Builder Extended
+<div align="center">
+    <img src="assets/logo.png" width="200" height="200">
+</div>
+<h1 align="center"> TypeORM Query Builder Extended</h1>
+
+This library allows you to automatically transform a Express.js `req.query` or a valid key/value object into a TypeORM SelectQueryBuilder that allows the option of making queries to a foreign relation/table through the query or key/value object parsed
+
+## Installation
+
+- yarn
+
+```bash
+yarn add typeorm-query-builder-extended
+```
+
+- npm
+
+```bash
+npm install typeorm-query-builder-extended
+```
+
+## How does it work?
+
+A `req.query string` or `valid key/value object` is sent to the builder along with the initial `SelectQueryBuilder` that should have been previously created. The builder converts all props from the query object into a valid `SelectQueryBuilder` props and appends it to the afore added `SelectQueryBuilder`
+
+## Usage
+
+Use ExtendedQueryBuilder export from package and pass your `req.query` or `key/value object` as arguments:
+
+```typescript
+import { ExtendedQueryBuilder } from 'typeorm-query-builder-extended';
+
+const queryBuilder = <YOUR_REPOSITORY>.createQueryBuilder(<YOUR_ALIAS>); // <YOUR_REPOSITORY> i.e: personRepository | <YOUR_ALIAS> i.e: person
+const builder = new ExtendedQueryBuilder(queryBuilder, req.query);
+const builtQuery = builder.build();
+// Now your query is built, use get the rows queried for
+const results = builtQuery.getRawMany();
+```
+
+Given the following url query string:
+
+`foo/?person_._firstName__contains=Sam&company_._name__startswith=Github&person_._job=Software Developer`
+
+When parsed into the extended query builder. The query will be converted into `SelectQueryBuilder` options
+
+## Structure of string query
+
+One query is mainly of 4 parts:
+
+### The table alias
+
+This should be the alias name of the table to query on
+The table is denoted from:
+
+- The alias set when declaring the initial query builder
+
+```typescript
+/* Omitted... */.createQueryBuilder('person');
+```
+
+- Or from any join added to the initial query builder
+
+```typescript
+/* Omitted
+.
+.
+.
+*/
+queryBuilder.leftJoin('person.company', 'company');
+```
+
+It is also denoted by adding `_._` after it
+i.e: `person_._`
+
+## The table's column name
+
+This should any available/existing column name found in the table
+
+It is denoted by adding `__` after it & should come after your table alias
+i.e:
+
+- `person_._firstName__ (IF YOU HAVE A LOOKUP YOU WANT TO ADD)`
+- `person_._firstName (IF YOU DO NOT HAVE A LOOKUP YOU WANT TO ADD)`
+
+## The query's lookup
+
+This is the table linking syntax provided to simplify data integration and SQL queries. It should come after your column name
+
+Check the available lookups [here](#available-lookups)
+
+## The table's column value
+
+This should the value to query in the column of a specific table
+
+This is denoted by adding it after your query lookup
+
+### Structure
+
+`foo/?<TABLE_ALIAS>_._<COLUMN_NAME>__<LOOKUP>=<COLUMN_VALUE>`
+
+## Example
+
+- Through ExpressJS route
+
+```javascript
+import { getRepository } from 'typeorm';
+import { Person } from '../entity/Person'; // Your typeORM entity class
+
+/**
+ * Lines here omitted for documentation reasons *
+ */
+
+app.get('/foo', (req, res) => {
+  const personRepository = getRepository(User);
+  const queryBuilder = personRepository.createQueryBuilder('person');
+  const builder = new ExtendedQueryBuilder(queryBuilder, req.query);
+  const built = queryBuilder.build();
+  const results = builtQuery.getRawMany();
+  return res.status(200).send(results); //returned results from the built query
+});
+```
+
+## Available Lookups
+
+| Lookup             | Behaviour                                                                      | Example                               | Types Working on        |
+| ------------------ | ------------------------------------------------------------------------------ | ------------------------------------- | ----------------------- |
+| _(none)_           | Return entries that match with value                                           | `foo=sam`                             | `String, Number, Enums` |
+| **contains**       | Return entries that contains value                                             | `foo__contains=sa`                    | `String, Enums`         |
+| **startswith**     | Return entries that starts with value                                          | `foo__startswith=a`                   | `String`                |
+| **endswith**       | Return entries that ends with value                                            | `foo__endswith=am`                    | `String`                |
+| **lt**             | Return entries with value less than or equal to provided                       | `foo__lt=18`                          | `Number, Date`          |
+| **lte**            | Return entries with value less than provided                                   | `foo__lte=18`                         | `Number, Date`          |
+| **gt**             | Returns entries with value greater than provided                               | `foo__gt=18`                          | `Number, Date`          |
+| **gte**            | Return entries with value greater than or equal to provided                    | `foo__gte=18`                         | `Number, Date`          |
+| **in**             | Return entries that match with values in list                                  | `foo__in=developer,tester`            | `String, Enums, Number` |
+| **between**        | Return entries in range                                                        | `foo__between=1,27`                   | `String, Number`        |
+| **jsonarrcontain** | Return entries that match a jsonb array column that contains value in the list | `foo__jsonarrcontain=RED,BLUE,ORANGE` | `String, Number, Enums` |

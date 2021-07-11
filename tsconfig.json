@@ -3,7 +3,7 @@
     "target": "es5",
     "noLib": false,
     "module": "commonjs",
-    "removeComments": true,
+    "removeComments": false,
     "noImplicitAny": false,
     "sourceMap": true,
     "allowJs": true,
