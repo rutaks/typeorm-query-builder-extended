@@ -7,16 +7,19 @@ class ExtendedQueryBuilder<T> {
   private queryBuilder: SelectQueryBuilder<T>;
   private queryObj: Record<string, any>;
 
-  constructor(queryBuilder: SelectQueryBuilder<T>, queryObj: Record<string, any>) {
+  constructor(queryBuilder: SelectQueryBuilder<T>, queryObj: Record<string, any>, sanitizeProps?: string[]) {
     if (!queryBuilder) {
-      throw new Error('No query builder was provider to the instance');
+      throw new Error('No query builder was provided to the instance');
     }
     if (!queryObj) {
-      throw new Error('No query object was provider to the instance');
+      throw new Error('No query object was provided to the instance');
     }
 
     this.queryBuilder = queryBuilder;
-    this.queryObj = queryObj;
+
+    if (sanitizeProps?.length) {
+      this.queryObj = this.sanitizeQuery(queryObj, sanitizeProps);
+    } else this.queryObj = queryObj;
   }
 
   /**
@@ -41,6 +44,19 @@ class ExtendedQueryBuilder<T> {
       FilterBuilder.build(this.queryBuilder, keyOperator, queryValue, condition);
     }
     return this.queryBuilder;
+  }
+  /**
+   * Removes all properties that are used on the API but should not be
+   * included when querying in the database
+   * @param {{ [key: string]: any }} query un-sanitized query
+   * @param {string[]} sanitizeProps array of properties to remove from the query object
+   * @returns sanitized query string
+   */
+  public sanitizeQuery(query: { [key: string]: any }, sanitizeProps: string[]): { [key: string]: any } {
+    for (const prop of sanitizeProps) {
+      delete query[prop];
+    }
+    return query;
   }
 }
 

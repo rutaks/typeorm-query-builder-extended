@@ -28,6 +28,7 @@ export enum ComparisonOperator {
   LT = '>',
   LTE = '<=',
   I_LIKE = 'ILIKE',
+  NOT_EQ = '!=',
 }
 
 export enum WhereCondition {
