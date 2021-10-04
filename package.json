@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/rutaks/typeorm-query-builder-extended#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.3.0",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",

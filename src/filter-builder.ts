@@ -18,7 +18,7 @@ export class FilterBuilder {
     queryValue: string,
     condition: WhereCondition,
   ): void {
-    const { EQ, GT, GTE, LT, LTE, I_LIKE } = ComparisonOperator;
+    const { EQ, GT, GTE, LT, LTE, I_LIKE, NOT_EQ } = ComparisonOperator;
     const [columnWithAlias, lookup] = keyLookup.split(LookupDelimiter.LOOKUP_DELIMITER); // Separate query column name from the query lookup operation
     const [alias, column] = columnWithAlias.split(LookupDelimiter.COLUMN_NAME_DELIMITER); // get table alias & table column name
     const queryValueObj = {}; // query value object used to parse query value into the query builder
@@ -73,6 +73,10 @@ export class FilterBuilder {
       case LookupFilter.JSON_ARRAY_CONTAINS:
         q = { alias, column, queryValueObj };
         this.buildJsonBLookupFilter(queryBuilder, queryValue, q);
+        break;
+      case LookupFilter.NOT:
+        query = `${alias}.${column} ${NOT_EQ} :${column}`;
+        queryBuilder[condition](query, queryValueObj);
         break;
       default:
         throw new Error(`Lookup ${lookup} not supported yet`);
