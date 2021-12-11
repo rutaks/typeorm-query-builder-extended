@@ -6,7 +6,6 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 13.x, 14.x, 15.x]
-    container: node.10.17-jessie
     services:
       postgres:
         image: postgres
