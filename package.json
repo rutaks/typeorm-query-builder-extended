@@ -18,7 +18,10 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "test:cov": "jest --coverage",
+    "test:watch": "jest --watch",
+    "codecov": "codecov"
   },
   "repository": {
     "type": "git",
@@ -44,6 +47,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.3.0",
     "jest": "^27.0.6",
+    "pg": "^8.4.0",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
     "tslint": "^6.1.3",

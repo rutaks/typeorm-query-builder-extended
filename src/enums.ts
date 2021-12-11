@@ -25,7 +25,7 @@ export enum ComparisonOperator {
   EQ = '=',
   GT = '>',
   GTE = '>=',
-  LT = '>',
+  LT = '<',
   LTE = '<=',
   I_LIKE = 'ILIKE',
   NOT_EQ = '!=',
