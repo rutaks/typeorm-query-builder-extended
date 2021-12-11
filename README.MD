@@ -35,7 +35,8 @@ Use ExtendedQueryBuilder export from package and pass your `req.query` or `key/v
 import { ExtendedQueryBuilder } from 'typeorm-query-builder-extended';
 
 const queryBuilder = <YOUR_REPOSITORY>.createQueryBuilder(<YOUR_ALIAS>); // <YOUR_REPOSITORY> i.e: personRepository | <YOUR_ALIAS> i.e: person
-const builder = new ExtendedQueryBuilder(queryBuilder, req.query);
+
+const builder = new ExtendedQueryBuilder(queryBuilder, req.query,[...'page','limit']); // The third parameter is an optional array of properties in the req.query that you do not want in the database query object.(i.e: page, limit, etc)
 const builtQuery = builder.build();
 // Now your query is built, use get the rows queried for
 const results = builtQuery.getRawMany();
@@ -139,3 +140,4 @@ app.get('/foo', (req, res) => {
 | **in**             | Return entries that match with values in list                                  | `foo__in=developer,tester`            | `String, Enums, Number` |
 | **between**        | Return entries in range                                                        | `foo__between=1,27`                   | `String, Number`        |
 | **jsonarrcontain** | Return entries that match a jsonb array column that contains value in the list | `foo__jsonarrcontain=RED,BLUE,ORANGE` | `String, Number, Enums` |
+| **not**            | Return entries that do not match with value                                    | `foo__not=ACTIVE`                     | `String, Number, Enums` |
