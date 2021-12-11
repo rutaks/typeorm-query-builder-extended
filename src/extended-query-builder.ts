@@ -11,7 +11,7 @@ class ExtendedQueryBuilder<T> {
     if (!queryBuilder) {
       throw new Error('No query builder was provider to the instance');
     }
-    if (!queryObj) {
+    if (Object.keys(queryObj)?.length < 1) {
       throw new Error('No query object was provider to the instance');
     }
 
