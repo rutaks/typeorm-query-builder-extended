@@ -18,3 +18,7 @@ export class Owner {
   @Column({ default: false })
   isDeleted: boolean = false;
 }
+
+module.exports = {
+  Owner,
+};

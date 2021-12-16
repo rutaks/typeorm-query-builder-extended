@@ -62,3 +62,7 @@ class ExtendedQueryBuilder<T> {
 }
 
 export default ExtendedQueryBuilder;
+
+module.exports = {
+  ExtendedQueryBuilder,
+};
