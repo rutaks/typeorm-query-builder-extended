@@ -22,7 +22,7 @@ jobs:
     - run: rm -rvf dist
     - run: npm version ${{ github.event.release.tag_name }}
     - run: npm run build
-    - run: npm publish --tag ${{ github.event.release.target_commitish }}
+    - run: npm publish --tag latest
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
     # push the version changes to GitHub
