@@ -1,21 +1,30 @@
-name: NPM Publish
-
 on:
-  push:
-    branches:
-     - main
+  release:
+    types: [published]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: rm -rvf dist/
-      - run: yarn
-      - run: yarn build
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_ACCESS_TOKEN }}
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.release.target_commitish }}
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+    - run: npm ci
+    - run: git config --global user.name "Samuel Rutakayile"
+    - run: git config --global user.email "rootsum.dev@gmail.com"
+    - run: npm version ${{ github.event.release.tag_name }}
+    - run: npm run build
+    - run: npm publish --tag ${{ github.event.release.target_commitish }}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+    # push the version changes to GitHub
+    - run: git push
+      env:
+        # The secret is passed automatically. Nothing to configure.
+        github-token: ${{ secrets.GITHUB_TOKEN }}
