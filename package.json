@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "jest --config jestconfig.json",
+    "build": "rm -rvf dist && tsc -p .",
     "build:watch": "rm -rvf dist && tsc -p . --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
