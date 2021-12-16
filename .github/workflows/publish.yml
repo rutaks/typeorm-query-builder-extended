@@ -15,9 +15,11 @@ jobs:
       with:
         node-version: 12
         registry-url: https://registry.npmjs.org/
+        key: ${{ runner.os }}-mycache-v1-${{ hashFiles(dist/**) }}
     - run: npm ci
     - run: git config --global user.name "Samuel Rutakayile"
     - run: git config --global user.email "rootsum.dev@gmail.com"
+    - run: rm -rvf dist
     - run: npm version ${{ github.event.release.tag_name }}
     - run: npm run build
     - run: npm publish --tag ${{ github.event.release.target_commitish }}
