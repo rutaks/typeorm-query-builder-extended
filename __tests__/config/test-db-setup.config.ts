@@ -1,7 +1,7 @@
 import { Connection, createConnection } from 'typeorm';
 import * as path from 'path';
-import dotenv = require('dotenv');
-dotenv.config();
+import DotEnv = require('dotenv');
+DotEnv.config();
 
 jest.setTimeout(5 * 60 * 1000);
 
