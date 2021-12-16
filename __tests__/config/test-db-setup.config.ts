@@ -1,7 +1,8 @@
 import { Connection, createConnection } from 'typeorm';
 import * as path from 'path';
+import dotenv = require('dotenv');
+dotenv.config();
 
-require('dotenv').config();
 jest.setTimeout(5 * 60 * 1000);
 
 export let connection: Connection;
