@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: rm -rvf dist/
       - run: yarn
       - run: yarn build
       - uses: JS-DevTools/npm-publish@v1
