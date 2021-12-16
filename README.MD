@@ -5,6 +5,9 @@
 <div align="center">
   <img src="https://img.shields.io/npm/dt/typeorm-query-builder-extended.svg">
   <img src="https://img.shields.io/npm/v/typeorm-query-builder-extended.svg">
+  <a href="https://codecov.io/gh/rutaks/typeorm-query-builder-extended">
+    <img src="https://codecov.io/gh/rutaks/typeorm-query-builder-extended/branch/main/graph/badge.svg?token=IFVV7MUUOT"/>
+</a>
 </div>
 
 This library allows you to automatically transform a Express.js `req.query` or a valid key/value object into a TypeORM SelectQueryBuilder that allows the option of making queries to a foreign relation/table through the query or key/value object parsed
