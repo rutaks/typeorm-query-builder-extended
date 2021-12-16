@@ -11,19 +11,21 @@ This library allows you to automatically transform a Express.js `req.query` or a
 
 ## Installation
 
-- yarn
-
 ```bash
 yarn add typeorm-query-builder-extended
 ```
 
-- npm
+OR
 
 ```bash
 npm install typeorm-query-builder-extended
 ```
 
 ## How does it work?
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/rutaks/typeorm-query-builder-extended/main/assets/img/how_it_works.png" width="800" height="400">
+</div>
 
 A `req.query string` or `valid key/value object` is sent to the builder along with the initial `SelectQueryBuilder` that should have been previously created. The builder converts all props from the query object into a valid `SelectQueryBuilder` props and appends it to the afore added `SelectQueryBuilder`
 
@@ -42,66 +44,53 @@ const builtQuery = builder.build();
 const results = builtQuery.getRawMany();
 ```
 
-Given the following url query string:
-
-`foo/?person_._firstName__contains=Sam&company_._name__startswith=Github&person_._job=Software Developer`
-
-When parsed into the extended query builder. The query will be converted into `SelectQueryBuilder` options
-
 ## Structure of string query
 
 One query is mainly of 4 parts:
 
-### The table alias
+- Table Alias `The Alias denoting table in the query string`
+- Table column name `The name of column of the table being queried on`
+- Query Lookup `The operation done on the table`
+- Table Column Value `The value of the query operation`
 
-This should be the alias name of the table to query on
-The table is denoted from:
+### Full Structure
 
-- The alias set when declaring the initial query builder
+`foo/?<TABLE_ALIAS>_._<COLUMN_NAME>__<LOOKUP>=<COLUMN_VALUE>`
+
+#### The table alias
+
+Denoted by `_._` in the query string
+
+i.e: `person_._`
 
 ```typescript
 /* Omitted... */.createQueryBuilder('person');
 ```
 
-- Or from any join added to the initial query builder
+- Or when using joins:
 
 ```typescript
-/* Omitted
 .
 .
 .
-*/
 queryBuilder.leftJoin('person.company', 'company');
 ```
 
-It is also denoted by adding `_._` after it
-i.e: `person_._`
+#### The table's column name
 
-## The table's column name
-
-This should any available/existing column name found in the table
-
-It is denoted by adding `__` after it & should come after your table alias
+Denoted by `__`
 i.e:
 
 - `person_._firstName__ (IF YOU HAVE A LOOKUP YOU WANT TO ADD)`
 - `person_._firstName (IF YOU DO NOT HAVE A LOOKUP YOU WANT TO ADD)`
 
-## The query's lookup
-
-This is the table linking syntax provided to simplify data integration and SQL queries. It should come after your column name
+#### The query's lookup
 
 Check the available lookups [here](#available-lookups)
 
-## The table's column value
-
-This should the value to query in the column of a specific table
+#### The table's column value
 
 This is denoted by adding it after your query lookup
-
-### Structure
-
-`foo/?<TABLE_ALIAS>_._<COLUMN_NAME>__<LOOKUP>=<COLUMN_VALUE>`
 
 ## Example
 
