@@ -1,6 +1,6 @@
 {
   "name": "typeorm-query-builder-extended",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Easily transform a query string into a TypeORM SelectQueryBuilder with foreign relation/table",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
