@@ -20,7 +20,6 @@ jobs:
     - run: git config --global user.name "Samuel Rutakayile"
     - run: git config --global user.email "rootsum.dev@gmail.com"
     - run: rm -rvf dist
-    - run: npm version ${{ github.event.release.tag_name }}
     - run: npm run build
     - run: cp README.MD dist/
     - run: cp package.json dist/
