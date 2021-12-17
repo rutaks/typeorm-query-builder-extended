@@ -1,6 +1,5 @@
+coverage
 node_modules
-/lib
-/dist
-/coverage
+dist
 .env
 .env.*

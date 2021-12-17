@@ -41,7 +41,7 @@ import { ExtendedQueryBuilder } from 'typeorm-query-builder-extended';
 
 const queryBuilder = <YOUR_REPOSITORY>.createQueryBuilder(<YOUR_ALIAS>); // <YOUR_REPOSITORY> i.e: personRepository | <YOUR_ALIAS> i.e: person
 
-const builder = new ExtendedQueryBuilder(queryBuilder, req.query,[...'page','limit']); // The third parameter is an optional array of properties in the req.query that you do not want in the database query object.(i.e: page, limit, etc)
+const builder = new ExtendedQueryBuilder(queryBuilder, req.query); // The third parameter is an optional array of properties in the req.query that you do not want in the database query object.(i.e: page, limit, etc)
 const builtQuery = builder.build();
 // Now your query is built, use get the rows queried for
 const results = builtQuery.getRawMany();
@@ -97,22 +97,23 @@ This is denoted by adding it after your query lookup
 
 ## Example
 
-- Through ExpressJS route
+- You can find a demo project of the package [here](https://github.com/rutaks/typeorm-query-builder-extended-demo)
 
-```javascript
+```typescript
 import { getRepository } from 'typeorm';
-import { Person } from '../entity/Person'; // Your typeORM entity class
+import { ExtendedQueryBuilder } from 'typeorm-query-builder-extended';
+import { User } from './path-to-your-entity/User'; // Your typeORM entity class
 
-/**
- * Lines here omitted for documentation reasons *
- */
+.
+.
+.
 
 app.get('/foo', (req, res) => {
-  const personRepository = getRepository(User);
-  const queryBuilder = personRepository.createQueryBuilder('person');
+  const userRepository = getRepository(User);
+  const queryBuilder = userRepository.createQueryBuilder('user');
   const builder = new ExtendedQueryBuilder(queryBuilder, req.query);
-  const built = queryBuilder.build();
-  const results = builtQuery.getRawMany();
+  const builtQuery = builder.build();
+  const results = builtQuery.getMany();
   return res.status(200).send(results); //returned results from the built query
 });
 ```
