@@ -38,28 +38,8 @@ export class FilterBuilder {
 
     switch (lookup) {
       case LookupFilter.CONTAINS:
-        query = `${alias}.${column} ${I_LIKE} :${column}`;
+        query = this.getQueryString({ alias, column, lookup: I_LIKE });
         queryValueObj[column] = `%${queryValue}%`;
-        queryBuilder[condition](query, queryValueObj);
-        break;
-      case LookupFilter.LESS_THAN:
-        query = `${alias}.${column} ${LT} :${column}`;
-        queryBuilder[condition](query, queryValueObj);
-        break;
-      case LookupFilter.LESS_THAN_OR_EQUAL:
-        query = `${alias}.${column} ${LTE} :${column}`;
-        queryBuilder[condition](query, queryValueObj);
-        break;
-      case LookupFilter.GREATER_THAN:
-        query = `${alias}.${column} ${GT} :${column}`;
-        queryBuilder[condition](query, queryValueObj);
-        break;
-      case LookupFilter.GREATER_THAN_OR_EQUAL:
-        query = `${alias}.${column} ${GTE} :${column}`;
-        queryBuilder[condition](query, queryValueObj);
-        break;
-      case LookupFilter.EQUAL:
-        query = `${alias}.${column} ${EQ} :${column}`;
         queryBuilder[condition](query, queryValueObj);
         break;
       case LookupFilter.IN:
@@ -74,8 +54,14 @@ export class FilterBuilder {
         q = { alias, column, queryValueObj };
         this.buildJsonBLookupFilter(queryBuilder, queryValue, q);
         break;
+      case LookupFilter.LESS_THAN:
+      case LookupFilter.LESS_THAN_OR_EQUAL:
+      case LookupFilter.GREATER_THAN:
+      case LookupFilter.GREATER_THAN_OR_EQUAL:
+      case LookupFilter.EQUAL:
       case LookupFilter.NOT:
-        query = `${alias}.${column} ${NOT_EQ} :${column}`;
+        const queryLookup = this.filterLookupToComparisonOperator(lookup);
+        query = this.getQueryString({ alias, column, lookup: queryLookup });
         queryBuilder[condition](query, queryValueObj);
         break;
       default:
@@ -104,11 +90,7 @@ export class FilterBuilder {
     queryValueObj[column] = '(';
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
-      if (i === options.length - 1) {
-        queryValueObj[column] += `'${option}')`;
-      } else {
-        queryValueObj[column] += `'${option}',`;
-      }
+      queryValueObj[column] += `'${option}'${i === options.length - 1 ? ')' : ','}`;
     }
     queryBuilder[condition](`${alias}.${column} IN ${queryValueObj[column]}`);
   }
@@ -138,14 +120,40 @@ export class FilterBuilder {
 
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
-      if (i === options.length - 1) {
-        queryValueObj[column] += `'${option}'`;
-      } else {
-        queryValueObj[column] += `'${option}',`;
-      }
+      queryValueObj[column] += `'${option}'${i === options.length - 1 ? '' : ','}`;
     }
 
     // Add jsonB query with array generated from options
     queryBuilder.andWhere(`${alias}.${column} ::jsonb ?| array[${queryValueObj[column]}]`);
+  }
+
+  /**
+   * Generates a query string
+   * @param queryObj Query props
+   * @returns query string
+   */
+  private static getQueryString(queryObj: { alias: string; column: string; lookup: string }) {
+    return `${queryObj?.alias}.${queryObj?.column} ${queryObj?.lookup} :${queryObj?.column}`;
+  }
+
+  private static filterLookupToComparisonOperator(filter: LookupFilter) {
+    switch (filter) {
+      case LookupFilter.CONTAINS:
+        return ComparisonOperator.I_LIKE;
+      case LookupFilter.LESS_THAN:
+        return ComparisonOperator.LT;
+      case LookupFilter.LESS_THAN_OR_EQUAL:
+        return ComparisonOperator.LTE;
+      case LookupFilter.GREATER_THAN:
+        return ComparisonOperator.GT;
+      case LookupFilter.GREATER_THAN_OR_EQUAL:
+        return ComparisonOperator.GTE;
+      case LookupFilter.EQUAL:
+        return ComparisonOperator.EQ;
+      case LookupFilter.NOT:
+        return ComparisonOperator.NOT_EQ;
+      default:
+        break;
+    }
   }
 }
