@@ -8,6 +8,7 @@
   <a href="https://codecov.io/gh/rutaks/typeorm-query-builder-extended">
     <img src="https://codecov.io/gh/rutaks/typeorm-query-builder-extended/branch/main/graph/badge.svg?token=IFVV7MUUOT"/>
 </a>
+<a href="https://codeclimate.com/github/rutaks/typeorm-query-builder-extended/maintainability"><img src="https://api.codeclimate.com/v1/badges/bb3ae85c8d13cb02a1c8/maintainability" /></a>
 </div>
 
 This library allows you to automatically transform a Express.js `req.query` or a valid key/value object into a TypeORM SelectQueryBuilder that allows the option of making queries to a foreign relation/table through the query or key/value object parsed
