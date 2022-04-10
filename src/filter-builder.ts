@@ -64,8 +64,6 @@ export class FilterBuilder {
         query = this.getQueryString({ alias, column, lookup: queryLookup });
         queryBuilder[condition](query, queryValueObj);
         break;
-      default:
-        throw new Error(`Lookup ${lookup} not supported yet`);
     }
   }
 
@@ -138,8 +136,6 @@ export class FilterBuilder {
 
   private static filterLookupToComparisonOperator(filter: LookupFilter) {
     switch (filter) {
-      case LookupFilter.CONTAINS:
-        return ComparisonOperator.I_LIKE;
       case LookupFilter.LESS_THAN:
         return ComparisonOperator.LT;
       case LookupFilter.LESS_THAN_OR_EQUAL:
@@ -152,8 +148,6 @@ export class FilterBuilder {
         return ComparisonOperator.EQ;
       case LookupFilter.NOT:
         return ComparisonOperator.NOT_EQ;
-      default:
-        break;
     }
   }
 }
